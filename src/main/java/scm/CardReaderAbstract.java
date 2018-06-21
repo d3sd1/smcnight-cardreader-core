@@ -2,8 +2,12 @@ package scm;
 
 import APP.DNIe;
 import EventHandler.CardReaderHandler;
+import model.ClientEntrance;
+import model.Entrance;
+import model.UserEntrance;
+import utils.Coding;
+
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.List;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -14,9 +18,23 @@ public abstract class CardReaderAbstract
 
     protected TerminalFactory factory;
     protected List<CardTerminal> terminals;
-    protected DNIe dni = new DNIe();
     protected CardTerminal terminal;
+    protected String lastVisitCert;
+    protected int lastVisitRate;
+    protected boolean lastVisitForceAccess;
+    public boolean manualAccess = false;
+    protected DNIe dni = new DNIe();
 
+    protected void clearData()
+    {
+        lastVisitCert = null;
+        lastVisitRate = 0;
+        lastVisitForceAccess = false;
+        manualAccess = false;
+        if (!dni.clearCertificates()) {
+            CardReaderHandler.getInstance().cardReaderError("CARD_READER_CRASH");
+        }
+    }
     public void initialize()
     {
         initCardReader();
@@ -34,14 +52,15 @@ public abstract class CardReaderAbstract
             factory = TerminalFactory.getInstance("PC/SC", null);
             terminals = factory.terminals().list();
         }
-        catch (CardException e)
-        {
-            CardReaderHandler.getInstance().cardReaderError("CARD_READER_NOT_FOUND");
-        }
         catch (NoSuchAlgorithmException  e)
         {
-            System.out.println(e);
+            e.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("CARD_READER_CRASH");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            CardReaderHandler.getInstance().cardReaderError("CARD_READER_NOT_FOUND");
         }
     }
 
@@ -61,6 +80,7 @@ public abstract class CardReaderAbstract
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("CARD_READER_NOT_FOUND");
         }
     }
@@ -77,6 +97,7 @@ public abstract class CardReaderAbstract
         }
         catch (CardException | NullPointerException ex)
         {
+            ex.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("CARD_READER_CRASH");
         }
     }
@@ -89,35 +110,47 @@ public abstract class CardReaderAbstract
             {
                 CardReaderHandler.getInstance().changeCardReaderStatus("WAITING");
                 terminal.waitForCardPresent(0);
-                if (terminal.isCardPresent())
+                if (terminal.isCardPresent() && !manualAccess)
                 {
-                    this.checkCards();
+                    CardReaderHandler.getInstance().changeCardReaderStatus("READING");
+                    /* Cargamos el certificado cuando se esté seleccionando la tarifa, así se agiliza el proceso.*/
+                    getCertificate();
+                    onCertificateLoaded();
                 }
                 terminal.waitForCardAbsent(0);
+                onFinishEntrance();
             }
         }
         catch (NullPointerException e)
         {
+            e.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("CARD_READER_NOT_FOUND");
         }
-        catch (CardException e)
+        catch (Exception e)
         {
+            e.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("CARD_READER_CRASH");
         }
     }
 
-    public void checkCards()
+    public void getCertificate()
     {
-        CardReaderHandler.getInstance().changeCardReaderStatus("READING");
-
-        X509Certificate cert = dni.readCertificate();
-        this.checkCards(cert);
+        lastVisitCert = Coding.encodeCertificate(dni.readCertificate());
     }
 
-    public void checkCards(X509Certificate cert)
-    {
-        this.checkCards(cert, false);
+    public void checkClientBans() {
+        doEntrance();
     }
+    public void checkClientData() {
+        checkClientBans();
+    }
+    public abstract void checkAccess(Entrance entrance);
+    public abstract void onFinishEntrance();
+    public abstract void onCertificateLoaded();
+    public abstract void clearExtraData();
+    public abstract void doEntrance();
 
-    public abstract void checkCards(X509Certificate cert, boolean forceAccess);
+    public void checkPricing() {
+        doEntrance();
+    }
 }

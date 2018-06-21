@@ -12,7 +12,6 @@ public class Client {
     private String serialNumber;
     private String nationality;
     private String biometric;
-    private boolean conflictive;
 
     public String getDni()
     {
@@ -92,16 +91,6 @@ public class Client {
     public void setBiometric(String biometric)
     {
         this.biometric = biometric;
-    }
-
-    public boolean isConflictive()
-    {
-        return conflictive;
-    }
-
-    public void setConflictive(boolean conflictive)
-    {
-        this.conflictive = conflictive;
     }
     
 }

@@ -30,6 +30,8 @@ public class App
     {
         try
         {
+            System.setProperty("java.net.preferIPv6Addresses","true");
+            System.setProperty("java.net.preferIPv4Stack","false");
             compatibleOS();
             startService();
             startNetwork();

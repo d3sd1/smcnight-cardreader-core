@@ -33,6 +33,7 @@ public class Coding {
         }
         catch (CertificateEncodingException e)
         {
+            e.printStackTrace();
             pemCert = "";
         }
         return base64Encode(pemCert);

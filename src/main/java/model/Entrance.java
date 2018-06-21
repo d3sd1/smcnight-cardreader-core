@@ -6,7 +6,7 @@ public class Entrance {
     
     protected long id;
     protected Date date;
-    protected String type;
+    protected EntranceType type;
 
     public long getId()
     {
@@ -28,12 +28,12 @@ public class Entrance {
         this.date = date;
     }
 
-    public String getType()
+    public EntranceType getType()
     {
         return type;
     }
 
-    public void setType(String type)
+    public void setType(EntranceType type)
     {
         this.type = type;
     }

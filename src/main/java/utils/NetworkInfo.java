@@ -32,6 +32,7 @@ public class NetworkInfo
         }
         catch (SocketException | UnknownHostException e)
         {
+            e.printStackTrace();
             Constants.NETWORK_MAC = "";
         }
     }
@@ -49,6 +50,7 @@ public class NetworkInfo
         }
         catch (UnknownHostException e)
         {
+            e.printStackTrace();
             Constants.NETWORK_IP = "";
         }
     }

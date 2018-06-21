@@ -11,6 +11,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
+
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import scm.Constants;
@@ -39,6 +41,7 @@ public class Call
     {
         if (instance == null)
         {
+            System.setProperty("java.net.preferIPv6Addresses","true");
             instance = new Call();
             instance.requestApiKey();
         }
@@ -62,14 +65,13 @@ public class Call
                 request.setParser(new JsonObjectParser(JSON_FACTORY));
             });
             GenericUrl url = new GenericUrl(Constants.apiUrl + "mac-token");
-
+            System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = requestFactory.buildGetRequest(url);
             HttpHeaders headers = new HttpHeaders();
             NetworkInfo ni = new NetworkInfo();
             headers.set("mac", ni.getMACAddress());
             requestGoogle.setHeaders(headers);
             HttpResponse response = requestGoogle.execute();
-
             json = IOUtils.toString(response.getContent(), StandardCharsets.UTF_8);
             Gson gson = new Gson();
             Map<String, String> myMap = gson.fromJson(json, new TypeToken<Map<String, Object>>()
@@ -79,6 +81,7 @@ public class Call
         }
         catch (HttpResponseException ex)
         {
+            ex.printStackTrace();
             API_ALLOWED = false;
             switch (ex.getStatusCode())
             {
@@ -92,6 +95,7 @@ public class Call
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             API_ALLOWED = false;
             CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
         }
@@ -113,6 +117,7 @@ public class Call
 
             GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
 
+            System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = requestFactory.buildGetRequest(url);
             HttpHeaders headers = new HttpHeaders();
             headers.setAuthorization("Bearer " + token);
@@ -123,6 +128,7 @@ public class Call
         }
         catch (HttpResponseException ex)
         {
+            ex.printStackTrace();
             switch (ex.getStatusCode())
             {
                 case 400:
@@ -141,6 +147,7 @@ public class Call
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
         }
         return json;
@@ -160,11 +167,13 @@ public class Call
             });
 
             GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            System.out.println("CALLED URL: " + url);
             HttpContent content = null;
             if (null != parameters)
             {
                 content = new JsonHttpContent(JSON_FACTORY, parameters);
             }
+            System.out.println(((JsonHttpContent) content).getData());
             HttpRequest requestGoogle = requestFactory.buildPostRequest(url, content);
             HttpHeaders headers = new HttpHeaders();
             headers.setAuthorization("Bearer " + token);
@@ -172,9 +181,11 @@ public class Call
             HttpResponse response = requestGoogle.execute();
 
             json = IOUtils.toString(response.getContent(), StandardCharsets.UTF_8);
+            System.out.println("RESP: " + json);
         }
         catch (HttpResponseException ex)
         {
+            ex.printStackTrace();
             switch (ex.getStatusCode())
             {
                 case 400:
@@ -193,6 +204,7 @@ public class Call
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
         }
         return json;
@@ -212,11 +224,13 @@ public class Call
             });
 
             GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            System.out.println("CALLED URL: " + url);
             HttpContent content = null;
             if (null != parameters)
             {
                 content = new JsonHttpContent(JSON_FACTORY, parameters);
             }
+            System.out.println(((JsonHttpContent) content).getData());
             HttpRequest requestGoogle = requestFactory.buildPutRequest(url, content);
             HttpHeaders headers = new HttpHeaders();
             headers.setAuthorization("Bearer " + token);
@@ -227,6 +241,7 @@ public class Call
         }
         catch (HttpResponseException ex)
         {
+            ex.printStackTrace();
             switch (ex.getStatusCode())
             {
                 case 400:
@@ -248,6 +263,7 @@ public class Call
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
         }
         return json;
@@ -267,6 +283,7 @@ public class Call
             });
 
             GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = requestFactory.buildDeleteRequest(url);
             HttpHeaders headers = new HttpHeaders();
             headers.setAuthorization("Bearer " + token);
@@ -277,6 +294,7 @@ public class Call
         }
         catch (HttpResponseException ex)
         {
+            ex.printStackTrace();
             switch (ex.getStatusCode())
             {
                 case 400:
@@ -295,6 +313,7 @@ public class Call
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
         }
         return json;
