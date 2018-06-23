@@ -1,13 +1,7 @@
 package APP;
 
 import EventHandler.CardReaderHandler;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
@@ -17,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import scm.Constants;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -125,6 +118,7 @@ public class Call
             HttpResponse response = requestGoogle.execute();
 
             json = IOUtils.toString(response.getContent(), StandardCharsets.UTF_8);
+            System.out.println(json);
         }
         catch (HttpResponseException ex)
         {
@@ -153,7 +147,7 @@ public class Call
         return json;
     }
 
-    public String post(String urlstr, HashMap<String, Object> parameters)
+    public String post(String urlstr, Object parameters)
     {
 
         String json = null;
@@ -210,7 +204,7 @@ public class Call
         return json;
     }
 
-    public String put(String urlstr, HashMap<String, Object> parameters)
+    public String put(String urlstr, Object parameters)
     {
 
         String json = null;
@@ -225,13 +219,18 @@ public class Call
 
             GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
             System.out.println("CALLED URL: " + url);
-            HttpContent content = null;
-            if (null != parameters)
+            HttpRequest requestGoogle = null;
+            if (null != parameters && !(parameters instanceof String))
             {
-                content = new JsonHttpContent(JSON_FACTORY, parameters);
+                JsonHttpContent content = new JsonHttpContent(JSON_FACTORY, parameters);
+                requestGoogle = requestFactory.buildPostRequest(url, content);
             }
-            System.out.println(((JsonHttpContent) content).getData());
-            HttpRequest requestGoogle = requestFactory.buildPutRequest(url, content);
+            else if(parameters instanceof String)
+            {
+                requestGoogle = requestFactory.buildPutRequest(url, ByteArrayContent.fromString("application/json", parameters.toString()));
+            }
+
+            requestGoogle.getHeaders().setContentType("application/json");
             HttpHeaders headers = new HttpHeaders();
             headers.setAuthorization("Bearer " + token);
             requestGoogle.setHeaders(headers);

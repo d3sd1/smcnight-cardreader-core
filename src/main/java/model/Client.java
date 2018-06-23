@@ -8,10 +8,11 @@ public class Client {
     private String name;
     private String surname1;
     private String surname2;
-    private Date birthDate;
-    private String serialNumber;
-    private String nationality;
-    private String biometric;
+    private Date birthdate;
+    private Nationality nationality;
+    private Gender gender;
+    private String address;
+    private String email;
 
     public String getDni()
     {
@@ -53,44 +54,48 @@ public class Client {
         this.surname2 = surname2;
     }
 
-    public Date getBirthDate()
+    public Date getBirthdate()
     {
-        return birthDate;
+        return birthdate;
     }
 
-    public void setBirthDate(Date birthDate)
+    public void setBirthdate(Date birthdate)
     {
-        this.birthDate = birthDate;
+        this.birthdate = birthdate;
     }
 
-    public String getSerialNumber()
-    {
-        return serialNumber;
-    }
 
-    public void setSerialNumber(String serialNumber)
-    {
-        this.serialNumber = serialNumber;
-    }
-
-    public String getNationality()
+    public Nationality getNationality()
     {
         return nationality;
     }
 
-    public void setNationality(String nationality)
+    public void setNationality(Nationality nationality)
     {
         this.nationality = nationality;
     }
 
-    public String getBiometric()
-    {
-        return biometric;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setBiometric(String biometric)
-    {
-        this.biometric = biometric;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
-    
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -3,6 +3,7 @@ package scm;
 import APP.DNIe;
 import EventHandler.CardReaderHandler;
 import model.ClientEntrance;
+import model.ClientEntrancePricing;
 import model.Entrance;
 import model.UserEntrance;
 import utils.Coding;
@@ -20,16 +21,16 @@ public abstract class CardReaderAbstract
     protected List<CardTerminal> terminals;
     protected CardTerminal terminal;
     protected String lastVisitCert;
-    protected int lastVisitRate;
-    protected boolean lastVisitForceAccess;
+    protected ClientEntrancePricing lastVisitRate;
+    protected boolean lastVisitforceaccess;
     public boolean manualAccess = false;
     protected DNIe dni = new DNIe();
 
     protected void clearData()
     {
         lastVisitCert = null;
-        lastVisitRate = 0;
-        lastVisitForceAccess = false;
+        lastVisitRate = null;
+        lastVisitforceaccess = false;
         manualAccess = false;
         if (!dni.clearCertificates()) {
             CardReaderHandler.getInstance().cardReaderError("CARD_READER_CRASH");

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import model.*;
 
@@ -14,15 +15,16 @@ public class Api {
         Gson gson = new Gson();
         return gson.fromJson(Call.getInstance().get("version"), Version.class);
     }
-    public ClientEntrance clientEntrance(String encodedCert, int rate, boolean forceAccess, boolean vip)
+    public ClientEntrance clientEntrance(ClientEntrance clientEntrance)
     {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX").create();
+/*
+
         HashMap<String, Object> params = new HashMap();
-        params.put("cert", encodedCert);
-        params.put("forceAccess", forceAccess);
-        params.put("vip", vip);
-        params.put("rate", rate);
-        return gson.fromJson(Call.getInstance().put("client/entrance",params), ClientEntrance.class);
+        params.put("vip", clientEntrance.isVip());
+        params.put("forceaccess", clientEntrance.isforceaccess());
+ */
+        return gson.fromJson(Call.getInstance().put("client/entrance",gson.toJson(clientEntrance)), ClientEntrance.class);
     }
     public UserEntrance userEntrance(String encodedCert)
     {
@@ -58,5 +60,20 @@ public class Api {
     {
         Gson gson = new Gson();
         return gson.fromJson(Call.getInstance().get("client/entrance/type/" + dni), EntranceType.class);
+    }
+    public Client clientDataById(String dni)
+    {
+        Gson gson = new Gson();
+        return gson.fromJson(Call.getInstance().get("client/info/" + dni), Client.class);
+    }
+    public List<Gender> genders()
+    {
+        Gson gson = new Gson();
+        return gson.fromJson(Call.getInstance().get("client/genders"), new TypeToken<List<Gender>>(){}.getType());
+    }
+    public List<Nationality> nationalities()
+    {
+        Gson gson = new Gson();
+        return gson.fromJson(Call.getInstance().get("client/nationalities"), new TypeToken<List<Nationality>>(){}.getType());
     }
 }
