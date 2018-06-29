@@ -223,7 +223,7 @@ public class Call
             if (null != parameters && !(parameters instanceof String))
             {
                 JsonHttpContent content = new JsonHttpContent(JSON_FACTORY, parameters);
-                requestGoogle = requestFactory.buildPostRequest(url, content);
+                requestGoogle = requestFactory.buildPutRequest(url, content);
             }
             else if(parameters instanceof String)
             {

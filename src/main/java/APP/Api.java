@@ -31,6 +31,7 @@ public class Api {
         Gson gson = new Gson();
         HashMap<String, Object> params = new HashMap();
         params.put("cert", encodedCert);
+        System.out.println(encodedCert);
         return gson.fromJson(Call.getInstance().put("user/entrance",params), UserEntrance.class);
     }
     public UserEntrance userEntranceByDni(String dni)
