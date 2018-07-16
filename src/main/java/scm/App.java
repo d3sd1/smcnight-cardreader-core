@@ -40,6 +40,7 @@ public class App
         }
         catch (Exception e)
         {
+            CardReaderHandler.getInstance().cardReaderError("INIT_ERROR");
             e.printStackTrace();
         }
     }

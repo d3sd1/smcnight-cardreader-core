@@ -82,7 +82,7 @@ public class Call
                     CardReaderHandler.getInstance().cardReaderError("PC_API_NOT_ADDED");
                     break;
                 case 406:
-                    CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
+                    CardReaderHandler.getInstance().cardReaderError("API_OFFLINE");
                     break;
             }
         }
@@ -90,7 +90,7 @@ public class Call
         {
             ex.printStackTrace();
             API_ALLOWED = false;
-            CardReaderHandler.getInstance().cardReaderError("API_ACCESS_ERROR");
+            CardReaderHandler.getInstance().cardReaderError("API_OFFLINE");
         }
         return json;
     }

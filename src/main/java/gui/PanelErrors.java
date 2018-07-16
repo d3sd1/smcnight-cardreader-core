@@ -14,6 +14,10 @@ public class PanelErrors
                 error.setMainText("Error del lector de tarjetas");
                 error.setBottomText("El lector de tarjetas ha fallado.");
                 break;
+            case "INIT_ERROR":
+                error.setMainText("Error de inicio");
+                error.setBottomText("Se ha producido un error crítico.");
+                break;
             case "PC_INET_CRASH":
                 error.setMainText("Error de conexión");
                 error.setBottomText("El equipo no está conectado a una red.");
@@ -55,7 +59,7 @@ public class PanelErrors
                 error.setBottomText("El equipo actual no tiene permisos para ejecutar la aplicación.");
                 break;
             case "API_OFFLINE":
-                error.setMainText("Error del servidor (API)");
+                error.setMainText("Error de API");
                 error.setBottomText("El servidor principal no está disponible.");
                 break;
             default:
