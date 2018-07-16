@@ -57,7 +57,7 @@ public class Call
             {
                 request.setParser(new JsonObjectParser(JSON_FACTORY));
             });
-            GenericUrl url = new GenericUrl(Constants.apiUrl + "mac-token");
+            GenericUrl url = new GenericUrl(Constants.SCM_API + "mac-token");
             System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = requestFactory.buildGetRequest(url);
             HttpHeaders headers = new HttpHeaders();
@@ -108,7 +108,7 @@ public class Call
                 request.setParser(new JsonObjectParser(JSON_FACTORY));
             });
 
-            GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            GenericUrl url = new GenericUrl(Constants.SCM_API + urlstr);
 
             System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = requestFactory.buildGetRequest(url);
@@ -160,7 +160,7 @@ public class Call
                 request.setParser(new JsonObjectParser(JSON_FACTORY));
             });
 
-            GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            GenericUrl url = new GenericUrl(Constants.SCM_API + urlstr);
             System.out.println("CALLED URL: " + url);
             HttpContent content = null;
             if (null != parameters)
@@ -217,7 +217,7 @@ public class Call
                 request.setParser(new JsonObjectParser(JSON_FACTORY));
             });
 
-            GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            GenericUrl url = new GenericUrl(Constants.SCM_API + urlstr);
             System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = null;
             if (null != parameters && !(parameters instanceof String))
@@ -281,7 +281,7 @@ public class Call
                 request.setParser(new JsonObjectParser(JSON_FACTORY));
             });
 
-            GenericUrl url = new GenericUrl(Constants.apiUrl + urlstr);
+            GenericUrl url = new GenericUrl(Constants.SCM_API + urlstr);
             System.out.println("CALLED URL: " + url);
             HttpRequest requestGoogle = requestFactory.buildDeleteRequest(url);
             HttpHeaders headers = new HttpHeaders();

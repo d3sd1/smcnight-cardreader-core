@@ -71,7 +71,7 @@ public class AutoUpdater
         boolean success = false;
         try
         {
-            URL website = new URL(Constants.apiUrl + "download");
+            URL website = new URL(Constants.SCM_API + "download");
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream("update/lastest.exe");
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
